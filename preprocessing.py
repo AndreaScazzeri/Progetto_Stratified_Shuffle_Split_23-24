@@ -1,14 +1,12 @@
 import pandas as pd
 
-class PreProcessing():
-    def gestisci_elementi_vuoti(df):
-        pass
+df = pd.read_csv('breast_cancer.csv')
 
-    def feature_scaling(df):
-        pass
+def gestisci_elementi_vuoti(df):
+    pass
 
-    def divisione_features(df:pd.DataFrame):
-        dimensioni = df.shape
-        var_ind = df.iloc[:, :dimensioni[1] - 1]
-        prev = df.iloc[:, dimensioni[1] - 1:]
-        return var_ind, prev
+def feature_scaling(df):
+    pass
+
+def divisione_features(df):
+    pass
