@@ -1,14 +1,17 @@
 import pandas as pd
 from preprocessing import *
+from splittingFactory import SplittingFactory
 class KNNPipeline:
 
-    def __init__(self, path:str, fs:str='stand', splitting_type: str='holdout', ar:bool=False, er:bool=False,
+    def __init__(self, path:str, fs:str='stand', splitting_type: str='holdout', rapporto:int=70, n_esperimenti:int=5,ar:bool=False, er:bool=False,
                  sens:bool=False, spec:bool=False, gm:bool=False, all_metrics:bool=True):
         '''COSTRUTTORE DELLA CLASSE KNNPIPELINE
 
         :param path: percorso del file che contiene il dataset
         :param fs: stringa che specifica con che modo effettuare il feature scaling: 'stand' per standardizzazione, 'norm' per normalizzazione (di default 'stand')
         :param splitting_type: stringa che specifica con quale splittig del dataset effettuare l'addestramento del modello. Può essere di 3 tipi: 'holdout' per usare l'holdout; 'sss' per usare lo stratified shuffle subsampling; 'both' per usarle entrambe
+        :param rapporto: specifica il rapporto che deve esserci tra le dimensioni di test e train nel caso di scelta dell'holdout
+        :param n_esperimenti: specifica il numero di volte con cui si deve ripetere lo splitting sss
         :param ar: booleano che specifica se si vuole utilizzare la metrica Accuracy Rate
         :param er: booleano che specifica se si vuole utilizzare la metrica Error Rate
         :param sens: booleano che specifica se si vuole utilizzare la metrica Sensitivity
@@ -47,4 +50,10 @@ class KNNPipeline:
         elif self.fs == 'norm':
             feature_scaler = FeatureScaling.create('norm')
             data = feature_scaler.scale(data)
-        #continuare la pipeline
+        splitter = SplittingFactory(self.splitting_type)
+        if len(splitter==2):
+            data_splitted_1 = splitter[0].split(data)
+            data_splitted_2 = splitter[0].split(data)
+        else:
+            data_splitted = splitter.split(data)
+        #continuare la pipeline considerando l'eventualità di aver utilizzato entrambi i metodi di splitting
