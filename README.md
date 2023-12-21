@@ -19,4 +19,4 @@ l'implementazione del pattern factory insieme al pattern strategy per rendere il
 4. *kNN* vuole essere una classe che ricevendo in ingresso i data set di train e test fornisca la classificazione del test
 5. *Calcolo delle metriche* - utilizzare il pattern strategy per calcolare le metriche
 6. *Mostrare i risultati* (solo nel caso di uso di Stratified Shuffle Split) plottare tutte le metriche calcolate in 
-funzione delle diverse divisioni del dataset in trai e test set (boxplot)
+funzione delle diverse divisioni del dataset in train e test set (boxplot)
