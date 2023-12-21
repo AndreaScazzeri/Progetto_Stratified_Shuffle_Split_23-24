@@ -34,7 +34,7 @@ class KNNPipeline:
         Metodo che esegue tutta la pipeline del kNN
         :return: decidere che cose restituisce
         '''
-        dataset = pd.read_csv(self.path)
+        dataset = pd.read_csv(self.path) #implementare il factory pattern per rendere modulare la lettura dei dati
         preProcess = PreProcessing()
         #aggiungere la gestione degli elementi vuoti dopo la sua implementazione
         #dataset_corretto = preProcess.gestisci_elementi_vuoti(dataset)
