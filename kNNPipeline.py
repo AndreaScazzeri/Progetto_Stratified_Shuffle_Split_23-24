@@ -32,6 +32,7 @@ class KNNPipeline:
         #esegue la pipeline
         self.doPipeline()
 
+
     def doPipeline(self):
         '''
         Metodo che esegue tutta la pipeline del kNN
@@ -40,8 +41,8 @@ class KNNPipeline:
         dataset = pd.read_csv(self.path) #implementare il factory pattern per rendere modulare la lettura dei dati
         preProcess = PreProcessing()
         #aggiungere la gestione degli elementi vuoti dopo la sua implementazione
-        #dataset_corretto = preProcess.gestisci_elementi_vuoti(dataset)
-        ds = preProcess.divisione_features(dataset)
+        dataset_corretto = preProcess.gestisci_elementi_vuoti(dataset)
+        ds = preProcess.divisione_features(dataset_corretto)
         data = ds[0]
         truth = ds[1]
         feature_scaler = FeatureScaling.create(self.fs)
