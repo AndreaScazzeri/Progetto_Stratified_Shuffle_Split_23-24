@@ -6,4 +6,5 @@ class HoldoutSplitter(Splitting):
         Metodo ereditato dalla classe splitting. Serve per splittare con l'holdout il dataframe che gli viene passato
         :return: restituisce una tupla di dataframe. Il primo è il dataframe del trainset il secondo è il dataframe del testset
         '''
+        #Inizio ad implementare la funzione split della classe HoldoutSplitter
         pass
