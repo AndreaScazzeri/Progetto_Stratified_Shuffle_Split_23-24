@@ -6,8 +6,10 @@ from abc import ABC, abstractmethod
 
 class PreProcessing:
     def gestisci_elementi_vuoti(self,df:pd.DataFrame):
-        #questa funzione deve restituire un dataframe senza elementi vuoti
-        pass
+        df = df.dropna(axis=0)
+        new_file = 'new_file'
+        df.to_csv(new_file, index=False)
+
 
     def divisione_features(self,df:pd.DataFrame):
         '''Dato un dataframe restituisce una tupla dove il primo elemento è un dataFrame che contiene tutte le variabili
