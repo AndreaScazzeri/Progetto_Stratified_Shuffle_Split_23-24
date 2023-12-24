@@ -51,6 +51,7 @@ class KNNPipeline:
             feature_scaler = FeatureScaling.create('norm')
             data = feature_scaler.scale(data)
         splitter = SplittingFactory().create(self.splitting_type)
+        #da qua bisogna decidere come proseguire: o si usa un solo metodo di splitting o si usano entrambi. NB la traccia non dice di usarli entrambi in contemporanea
         if type(splitter)=='tuple':
             data_splitted_1 = splitter[0].split(data)
             data_splitted_2 = splitter[0].split(data)
