@@ -44,12 +44,8 @@ class KNNPipeline:
         ds = preProcess.divisione_features(dataset)
         data = ds[0]
         truth = ds[1]
-        if self.fs == 'stand':
-            feature_scaler = FeatureScaling.create('stand')
-            data = feature_scaler.scale(data)
-        elif self.fs == 'norm':
-            feature_scaler = FeatureScaling.create('norm')
-            data = feature_scaler.scale(data)
+        feature_scaler = FeatureScaling.create(self.fs)
+        data = feature_scaler.scale(data)
         splitter = SplittingFactory().create(self.splitting_type)
         #da qua bisogna decidere come proseguire: o si usa un solo metodo di splitting o si usano entrambi. NB la traccia non dice di usarli entrambi in contemporanea
         if type(splitter)=='tuple':
