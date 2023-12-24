@@ -50,8 +50,8 @@ class KNNPipeline:
         elif self.fs == 'norm':
             feature_scaler = FeatureScaling.create('norm')
             data = feature_scaler.scale(data)
-        splitter = SplittingFactory(self.splitting_type)
-        if len(splitter==2):
+        splitter = SplittingFactory().create(self.splitting_type)
+        if type(splitter)=='tuple':
             data_splitted_1 = splitter[0].split(data)
             data_splitted_2 = splitter[0].split(data)
         else:
