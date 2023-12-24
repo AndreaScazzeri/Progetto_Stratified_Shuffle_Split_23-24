@@ -32,6 +32,7 @@ class KNNPipeline:
         #esegue la pipeline
         self.doPipeline()
 
+
     def doPipeline(self):
         '''
         Metodo che esegue tutta la pipeline del kNN

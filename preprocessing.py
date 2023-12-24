@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 #from featureScalingNorm import FeatureScalingNorm
 
 class PreProcessing:
+
     def gestisci_elementi_vuoti(self,df:pd.DataFrame):
         df = df.dropna(axis=0)
         new_file = 'new_file'
