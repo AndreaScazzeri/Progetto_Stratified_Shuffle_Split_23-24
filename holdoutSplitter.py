@@ -39,19 +39,7 @@ class HoldoutSplitter(Splitting):
 
         return  train_set, test_set
 
-splitter = HoldoutSplitter()
 
-percorso_file = 'breast_cancer_test.csv'
-df = pd.read_csv(percorso_file)
-train_set, test_set = splitter.split(df,grandezza_test=0.2,numero_casuale=20)
-
-print('training set')
-print(train_set)
-
-print(' ')
-
-print('test set')
-print(test_set)
 
 
 
