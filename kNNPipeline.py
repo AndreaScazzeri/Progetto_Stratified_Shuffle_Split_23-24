@@ -42,11 +42,12 @@ class KNNPipeline:
         preProcess = PreProcessing()
         #aggiungere la gestione degli elementi vuoti dopo la sua implementazione
         dataset_corretto = preProcess.gestisci_elementi_vuoti(dataset)
-        ds = preProcess.divisione_features(dataset_corretto)
-        data = ds[0]
-        truth = ds[1]
+        # ds = preProcess.divisione_features(dataset_corretto)
+        # data = ds[0]
+        # truth = ds[1]
         feature_scaler = FeatureScaling.create(self.fs)
-        data = feature_scaler.scale(data)
+        data = feature_scaler.scale(dataset_corretto)
         splitter = SplittingFactory().create(self.splitting_type)
-        data_splitted = splitter.split(data,self.parametro_splitting)
+        # data_splitted = splitter.split(data, n_divisioni=self.parametro_splitting)
+        # print(type(data_splitted))
         #NB data splitted può essere una o più coppie di dataframe train e test
