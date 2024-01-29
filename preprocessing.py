@@ -58,6 +58,7 @@ class FeatureScalingStand(FeatureScaling):
         media = np.mean(df, axis=0)
         deviazione_standard = np.std(df, axis=0)
         standardizzazione = ((df - media) / deviazione_standard)
+        print(standardizzazione)
         return media, deviazione_standard, standardizzazione
 
 #classe per l'implementazione dello strategy pattern usato per il feature scaling
