@@ -3,7 +3,7 @@ from preprocessing import *
 from splittingFactory import SplittingFactory
 class KNNPipeline:
 
-    def __init__(self, path:str, fs:str='stand', splitting_type: str='holdout', parametro_splitting:int=5,ar:bool=False, er:bool=False,
+    def __init__(self, path:str, fs:str='stand', splitting_type: str='holdout', parametro_splitting:float=0.2,ar:bool=False, er:bool=False,
                  sens:bool=False, spec:bool=False, gm:bool=False, all_metrics:bool=True):
         '''COSTRUTTORE DELLA CLASSE KNNPIPELINE
 
@@ -46,7 +46,7 @@ class KNNPipeline:
         data = ds[0]
         truth = ds[1]
         feature_scaler = FeatureScaling.create(self.fs)
-        data = feature_scaler.scale(data)
+        data = feature_scaler.scale(dataset_corretto)
         splitter = SplittingFactory().create(self.splitting_type)
         data_splitted = splitter.split(data,self.parametro_splitting)
         #NB data splitted può essere una o più coppie di dataframe train e test
