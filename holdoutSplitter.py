@@ -1,9 +1,7 @@
 from splitting import Splitting
 import pandas as pd
-import random
-import pandas as pd
 class HoldoutSplitter(Splitting):
-    def split(self, df: pd.DataFrame, grandezza_test=0.2, numero_casuale=None):
+    def split(self, df: pd.DataFrame, ps):
         '''
         Metodo ereditato dalla classe splitting. Serve per splittare con l'holdout il dataframe che gli viene passato
         :return: restituisce una tupla di dataframe. Il primo è il dataframe del trainset il secondo è il dataframe del testset
@@ -21,37 +19,16 @@ class HoldoutSplitter(Splitting):
         '''
         #Inizio ad implementare la funzione split della classe HoldoutSplitter
 
-        #Questo costrutto mi é utile per la riproducibilitá, ovvero, se il 'seme' é lo stesso in diverse esecuzioni del programma, le sequenze di numeri casuali generate
-        #saranno uguali, questo mi permetterá di ottenere gli stessi risultati.
-        if numero_casuale is not None:
-            random.seed(numero_casuale)
 
+        #Calcola l'indice di divisione tra test set e train set
+        indice_di_divisione = int(len(df)*(1 - ps))
+        print(indice_di_divisione)
+        #Dividiamo ora il dataset in test set e train set
+        test_set = df[:indice_di_divisione]
+        train_set = df[indice_di_divisione:]
 
-        #Calcolo la dimensione del testset
-        grandezza_test = int(len(df) * grandezza_test)
+        return test_set, train_set
 
-        #Estraggo in modo casuale le righe per il testset. Se il dataframe ha un indice personalizzato utilizzo iloc per estrarre le righe
-        indici_test_set = random.sample(range(len(df)), grandezza_test)
-        test_set = df.iloc[indici_test_set]
-
-        #creo il trainingset escludendo le righe utilizzate per il testset
-        train_set = df.drop(index=indici_test_set)
-
-        return  train_set, test_set
-
-splitter = HoldoutSplitter()
-
-percorso_file = 'breast_cancer_test.csv'
-df = pd.read_csv(percorso_file)
-train_set, test_set = splitter.split(df,grandezza_test=0.2,numero_casuale=20)
-
-print('training set')
-print(train_set)
-
-print(' ')
-
-print('test set')
-print(test_set)
 
 
 
