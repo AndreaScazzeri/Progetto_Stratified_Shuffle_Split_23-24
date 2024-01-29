@@ -1,9 +1,8 @@
 from splitting import Splitting
 import pandas as pd
 import random
-import pandas as pd
 class HoldoutSplitter(Splitting):
-    def split(self, df: pd.DataFrame, ps):
+    def split(self, df: pd.DataFrame, ps, numero_divisioni, seed):
         '''
         Metodo ereditato dalla classe splitting. Serve per splittare con l'holdout il dataframe che gli viene passato
         :return: restituisce una tupla di dataframe. Il primo è il dataframe del trainset il secondo è il dataframe del testset
@@ -21,8 +20,11 @@ class HoldoutSplitter(Splitting):
         '''
         #Inizio ad implementare la funzione split della classe HoldoutSplitter
 
+        #Calcolo la grandezza del train set
+        grandezza_train_set = int(len(df) * (1 - ps))
+
         # Calcola l'indice di divisione tra test set e train set
-        indice_di_divisione = int(len(df) * (1 - ps))
+        indice_di_divisione_random = random.randint(0,len(df))
 
         # Dividiamo ora il dataset in test set e train set
         test_set = df[:indice_di_divisione]
