@@ -3,5 +3,5 @@ from abc import ABC,abstractmethod
 import pandas as pd
 class Splitting(ABC):
     @abstractmethod
-    def split(self,df:pd.DataFrame,ps:float):
+    def split(self,df:pd.DataFrame,ps:float,n:int,seed:int):
         pass
