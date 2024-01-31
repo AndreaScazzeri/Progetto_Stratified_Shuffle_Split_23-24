@@ -17,9 +17,13 @@ class KNN:
         :param k: è il parametro che mi indica quanti valori più vicini al punto devo prendere
         """
         self.k = k
-        self.x_train = esperimento[0][0]
+        self.x_train = esperimento[0][0][['Clump Thickness', 'Uniformity of Cell Size', 'Uniformity of Cell Shape',
+                  'Marginal Adhesion', 'Single Epithelial Cell Size', 'Bare Nuclei', 'Bland Chromatin',
+                  'Normal Nucleoli', 'Mitoses']]
         self.y_train = esperimento[0][1]
-        self.x_test = esperimento[1][0]
+        self.x_test = esperimento[1][0][['Clump Thickness', 'Uniformity of Cell Size', 'Uniformity of Cell Shape',
+                  'Marginal Adhesion', 'Single Epithelial Cell Size', 'Bare Nuclei', 'Bland Chromatin',
+                  'Normal Nucleoli', 'Mitoses']]
         self.y_test = esperimento[1][1]
 
     def calculate_distances(self, row_test):
