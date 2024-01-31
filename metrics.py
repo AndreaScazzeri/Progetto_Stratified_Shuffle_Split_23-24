@@ -150,4 +150,5 @@ class GeometryMean(Metrics):
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore della media geometriva
         '''
-        pass
+
+        # Inizio ad implementare la funzione calculate_metrics per la classe GeometryMean
