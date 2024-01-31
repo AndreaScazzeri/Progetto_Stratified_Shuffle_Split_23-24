@@ -38,7 +38,7 @@ class KNN:
         Questa funzione esegue le predizioni su ogni elemento del test e restituisce la predizione rispetto alla classe
         più numerosa nei k elementi più vicini
         """
-        predictions = []
+        predictions = self.y_test.copy()
         for index_test, row_test in self.x_test.iterrows():
             distances = self.calculate_distances(row_test)
             dist_ordinate = distances[distances[:,1].argsort()]
@@ -48,5 +48,5 @@ class KNN:
                 nearest_labels.append(self.y_train.loc[indice])
             unique_labels, counts = np.unique(nearest_labels, return_counts=True)
             predicted_label = unique_labels[np.argmax(counts)]
-            predictions.append([index_test,predicted_label])
-        return pd.DataFrame(np.array(predictions), columns=['Indice_test','Predizione'])
+            predictions.loc[index_test] = predicted_label
+        return predictions
