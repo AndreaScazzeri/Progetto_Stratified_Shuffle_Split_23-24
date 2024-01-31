@@ -9,8 +9,9 @@ class PreProcessing:
         Elimina le righe che contengono valori nulli
         """
         df = df.dropna(axis=0)
-        new_file = 'new_file'
-        df.to_csv(new_file, index=False)
+        # Qualora si decidesse di salvare il dataframe in un file csv
+        # new_file = 'dataset_senza_elementi_vuoti.csv'
+        # df.to_csv(new_file, index=False)
         return df
 
     def divisione_features(self, df: pd.DataFrame):
@@ -22,14 +23,7 @@ class PreProcessing:
         var_ind = df.iloc[:, :dimensioni[1] - 1]
         prev = df.iloc[:, dimensioni[1] - 1:]
         return var_ind, prev
-    def doDataPreprocessing(self, df: pd.DataFrame):
-        """
-        Funzione della classe PreProcessing che si occupa di effettuare tutto il processo
-        di preprocessing dei dati
-        :param df:
-        :return:
-        """
-        pass
+
 
 
 # la classe feature scaling è una classe astratta (strategy pattern)
