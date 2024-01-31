@@ -105,6 +105,8 @@ class Sensitivity(Metrics):
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore della sensitivity
         '''
+
+        # Inizio ad implementare la funzione calculate_metrics per la classe Sensitivity
         pass
 class Specificity(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
