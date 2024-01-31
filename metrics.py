@@ -49,7 +49,28 @@ class AccuracyRate(Metrics):
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore dell'accuracy rate
         '''
-        pass
+        #Inizio ad implementare la classe AccuracyRate
+
+        #Vedo quali sono gli insiemi degli elementi che sono comuni agli oggetti prediction e truth
+        indici_coincidenti = predictions.index.intersection(truth.index)
+
+        #Estraggo le righe dal dataframe 'predictions' che contengono gli indici specificati,
+        #ovvero 'indici_coincidenti' tramite la funzione loc
+        predizioni_coincidenti = predictions.loc[indici_coincidenti]
+
+        #Estraggo le righe dal dataframe 'truth' che contengono gli indici specificati,
+        #ovvero 'indici_coincidenti' tramite la funzione loc
+        verita_coincidenti = truth.loc[indici_coincidenti]
+
+        #Confronto gli elementi, colonna per colonna, dei 2 dataframe. Come risultante avrò una serie di valori
+        #booleani che mi dicono se i valori coincidono
+        valori_coincidenti = (predizioni_coincidenti == verita_coincidenti).all(axis=1)
+
+        #Calcolo l'accuracy rate utilizzando una media, essendo tali valori 0/1 , quello che restituirà sarà
+        #la percentuale di 'uni' nella serie di valori
+        accuracy_rate = valori_coincidenti.mean()
+        return accuracy_rate
+
 class ErrorRate(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
