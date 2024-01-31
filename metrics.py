@@ -49,7 +49,7 @@ class AccuracyRate(Metrics):
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore dell'accuracy rate
         '''
-
+        #Inizio ad implementare la classe AccuracyRate
         pass
 class ErrorRate(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
