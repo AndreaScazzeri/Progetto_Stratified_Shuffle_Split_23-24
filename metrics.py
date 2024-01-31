@@ -128,7 +128,8 @@ class Specificity(Metrics):
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore della specificity
         '''
-        pass
+
+        # Inizio ad implementare la funzione calculate_metrics per la classe Specificity
 class GeometryMean(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
