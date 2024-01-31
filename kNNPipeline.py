@@ -87,4 +87,5 @@ class KNNPipeline:
             perf=pd.DataFrame(perf, index=[0])
             # concateno le performance con gli esperimenti precedenti
             performance=pd.concat([performance, perf], ignore_index=True)
+            performance['Esperimento']=performance['Esperimento'].astype(int)
         print(performance)
