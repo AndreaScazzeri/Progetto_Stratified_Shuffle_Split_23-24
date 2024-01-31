@@ -80,8 +80,21 @@ class ErrorRate(Metrics):
         :return: resituisce il valore dell'error rate
         '''
 
-        # Inizio ad implementare la funzione calculate_metrics per la classe ErrorRate
-        pass
+        # Inizio ad implementare la funzione calculate_metrics per la classe ErrorRate, che è simile alla
+        # funzione per il calcolo dell'accuratezza.
+
+        indici_coincidenti = predictions.index.intersection(truth.index)
+        predizioni_coincidenti = predictions.loc[indici_coincidenti]
+        verita_coincidenti = truth.loc[indici_coincidenti]
+
+        # Confronto gli elementi, colonna per colonna, dei 2 dataframe. Come risultante avrò una serie di valori
+        # booleani che mi dicono se i valori non coincidono
+        valori_non_coincidenti = (predizioni_coincidenti != verita_coincidenti).all(axis=1)
+
+        # Calcolo l'error rate
+        error_rate = valori_non_coincidenti.mean()
+        return error_rate
+
 class Sensitivity(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
