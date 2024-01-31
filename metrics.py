@@ -52,7 +52,8 @@ class AccuracyRate(Metrics):
         #Inizio ad implementare la classe AccuracyRate
 
         #Vedo quali sono gli insiemi degli elementi che sono comuni agli oggetti prediction e truth
-        indici_coincidenti = predictions.index.intersection(truth.index)
+        indici_truth = truth.index
+        indici_coincidenti = predictions.index.intersection(indici_truth)
 
         #Estraggo le righe dal dataframe 'predictions' che contengono gli indici specificati,
         #ovvero 'indici_coincidenti' tramite la funzione loc
@@ -83,7 +84,8 @@ class ErrorRate(Metrics):
         # Inizio ad implementare la funzione calculate_metrics per la classe ErrorRate, che è simile alla
         # funzione per il calcolo dell'accuratezza.
 
-        indici_coincidenti = predictions.index.intersection(truth.index)
+        indici_truth = truth.index
+        indici_coincidenti = predictions.index.intersection(indici_truth)
         predizioni_coincidenti = predictions.loc[indici_coincidenti]
         verita_coincidenti = truth.loc[indici_coincidenti]
 
