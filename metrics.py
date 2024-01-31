@@ -107,7 +107,19 @@ class Sensitivity(Metrics):
         '''
 
         # Inizio ad implementare la funzione calculate_metrics per la classe Sensitivity
-        pass
+
+        indici_truth = truth.index
+        indici_coincidenti = predictions.index.intersection(indici_truth)
+        predizioni_coincidenti = predictions.loc[indici_coincidenti]
+        verita_coincidenti = truth.loc[indici_coincidenti]
+
+        # Confronto gli elementi, colonna per colonna, dei 2 dataframe. Come risultante avrò una serie di valori
+        # booleani che indica se, per ogni campione, la predizione e la verità sono entrambe uguali a 1
+        true_positive = ((predizioni_coincidenti == 1) & (verita_coincidenti == 1)).all(axis=1)
+
+        sensitivity_rate = true_positive.mean()
+        return sensitivity_rate
+
 class Specificity(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
