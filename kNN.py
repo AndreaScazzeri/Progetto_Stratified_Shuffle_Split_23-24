@@ -1,4 +1,4 @@
-
+import pandas as pd
 import numpy as np
 
 class KNN:
@@ -28,7 +28,7 @@ class KNN:
         tali distanze rispettivamente agli indici degli elementi del train test
         """
         distances = []
-        for index_train, row_train in self.data_train.iterrows():
+        for index_train, row_train in self.x_train.iterrows():
             dist = np.linalg.norm(row_train - row_test)
             distances.append([index_train,dist])
         return np.array(distances)
@@ -42,9 +42,11 @@ class KNN:
         for index_test, row_test in self.x_test.iterrows():
             distances = self.calculate_distances(row_test)
             dist_ordinate = distances[distances[:,1].argsort()]
-            nearest_neighbors_indices = dist_ordinate[:self.k]
-            nearest_labels = self.y_train[nearest_neighbors_indices]
+            nearest_neighbors_indices = dist_ordinate[:self.k,0].astype(int)
+            nearest_labels=[]
+            for indice in nearest_neighbors_indices:
+                nearest_labels.append(self.y_train.loc[indice])
             unique_labels, counts = np.unique(nearest_labels, return_counts=True)
             predicted_label = unique_labels[np.argmax(counts)]
             predictions.append([index_test,predicted_label])
-        return np.array(predictions)
+        return pd.DataFrame(np.array(predictions), columns=['Indice_test','Predizione'])

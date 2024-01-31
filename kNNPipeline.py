@@ -1,6 +1,7 @@
 import pandas as pd
 from preprocessing import *
 from splittingFactory import SplittingFactory
+from kNN import KNN
 class KNNPipeline:
 
     def __init__(self, path: str, fs: str = 'stand', splitting_type: str = 'holdout', parametro_splitting: float = 0.2,
@@ -70,3 +71,8 @@ class KNNPipeline:
             truth_train = preProcess.divisione_features(tupla[0])[1]
             truth_test = preProcess.divisione_features(tupla[1])[1]
             esperimenti.append([(data_train, truth_train),(data_test, truth_test)])
+
+        for esperimento in esperimenti:
+            kNN=KNN(esperimento)
+            predizioni = kNN.doPrediction()
+            print(type(predizioni[["Predizione"]]))
