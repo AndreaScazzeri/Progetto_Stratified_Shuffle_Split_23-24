@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import pandas as pd
+import math as m
 
 class Metrics(ABC):
     '''
@@ -152,3 +153,11 @@ class GeometryMean(Metrics):
         '''
 
         # Inizio ad implementare la funzione calculate_metrics per la classe GeometryMean
+        tpr_istanza = Sensitivity()
+        tnr_istanza = Specificity()
+        tpr = tpr_istanza.calculate_metrics(predictions, truth)
+        tnr = tnr_istanza.calculate_metrics(predictions, truth)
+
+        g_mean = m.sqrt(tpr + tnr)
+
+        return g_mean
