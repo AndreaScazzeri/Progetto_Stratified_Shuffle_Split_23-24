@@ -8,7 +8,7 @@ class KNNPipeline:
 
     def __init__(self, path: str, fs: str = 'stand', splitting_type: str = 'holdout', parametro_splitting: float = 0.2,
                  n_divisioni: int = 5,ar: bool = False, er: bool = False, sens: bool = False, spec: bool = False, gm: bool = False,
-                 all_metrics: bool = True):
+                 all_metrics: bool = True, seed: int = None):
         """
         COSTRUTTORE DELLA CLASSE KNNPIPELINE
         :param path: percorso del file che contiene il dataset
@@ -28,6 +28,7 @@ class KNNPipeline:
         :param spec: booleano che specifica se si vuole utilizzare la metrica Specificity
         :param gm: booleano che specifica se si vuole utilizzare la metrica Geometry Mean
         :param all_metrics: booleano che specifica se si vogliono utilizzare tutte le metriche precedenti
+        :param seed: seme per il pescaggio random, di train_set e test_set, utile per la riproducibilitá
         :return:
         """
         self.path = path
@@ -41,6 +42,7 @@ class KNNPipeline:
         self.spec = spec
         self.gm = gm
         self.all_metrics = all_metrics
+        self.seed = seed
         # esegue la pipeline
         self.doPipeline()
 
@@ -56,7 +58,7 @@ class KNNPipeline:
         # elimino le righe che contengono valori nulli
         dataset_corretto = preProcess.gestisci_elementi_vuoti(dataset)
         splitter = SplittingFactory().create(self.splitting_type)
-        data_splitted = splitter.split(dataset_corretto, self.parametro_splitting, self.n_divisioni)
+        data_splitted = splitter.split(dataset_corretto, self.parametro_splitting, self.n_divisioni, self.seed)
 
         # data_splitted è una lista di coppie di dataframe train e test
         # data_splitted = [(train, test), (train, test), ... , (train, test)]
@@ -89,6 +91,7 @@ class KNNPipeline:
             # concateno le performance con gli esperimenti precedenti
             performance=pd.concat([performance, perf], ignore_index=True)
             performance['Esperimento']=performance['Esperimento'].astype(int)
+        pd.set_option('display.max_columns', None)
         print(performance)
 
         plotter = PlotPerformance(performance)

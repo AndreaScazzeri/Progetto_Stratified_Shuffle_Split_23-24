@@ -135,7 +135,7 @@ class Specificity(Metrics):
 
         # Confronto gli elementi, riga per riga, dei 2 dataframe. Come risultante avrò una serie di valori
         # booleani che indica se, per ogni campione, la predizione e la verità sono entrambe uguali a 0 (2 nel nostro caso)
-        true_positive = (predizioni_classe_2 != df_truth2).all(axis=1)
+        true_positive = (predizioni_classe_2 == df_truth2).all(axis=1)
 
         #Calcolo la media
         specificity_rate = true_positive.mean()

@@ -5,7 +5,7 @@ import random
 
 
 class StratifiedShuffleSubsamplingSplitter(Splitting):
-    def split(self, df: pd.DataFrame, parametro_splitting, n_divisioni, seed=1):
+    def split(self, df: pd.DataFrame, parametro_splitting, n_divisioni, seed):
         """
         Metodo ereditato dalla classe splitting. Serve per splittare con lo stratified shuffle subsampling il dataframe
         che gli viene passato
