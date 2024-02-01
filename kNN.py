@@ -9,7 +9,7 @@ class KNN:
     '''
 
     #la funzione doTrain deve solamente calcolare la distanza euclidea di tutti i punti nel train da uno dei punti che stanno nel test
-    def __init__(self,esperimento: list, k=7):
+    def __init__(self,esperimento: list, k):
         """
         Costruttore della classe kNN:
         :param esperimento: è una lista che contiene due elementi, il primo è una tupla che contiene le informazioni del

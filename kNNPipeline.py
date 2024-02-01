@@ -40,6 +40,7 @@ class KNNPipeline:
         self.splitting_type = splitting_type
         self.parametro_splitting = parametro_splitting
         self.n_divisioni = n_divisioni
+        self.k = k
         self.ar = ar
         self.er = er
         self.sens = sens
@@ -87,7 +88,7 @@ class KNNPipeline:
         performance = pd.DataFrame({'Esperimento':[], 'Accuracy Rate':[], 'Error Rate':[], 'Sensitivity':[], 'Specificity':[], 'Geometry Mean':[]})
         for esperimento in esperimenti:
             # Creo un oggetto kNN che prende in input un esperimento
-            kNN=KNN(esperimento)
+            kNN=KNN(esperimento, self.k)
             # Eseguo le predizioni per il kNN e le salvo in un dataframe con la stessa struttura delle verità
             predizioni = kNN.doPrediction()
             # Calcolo le metriche
