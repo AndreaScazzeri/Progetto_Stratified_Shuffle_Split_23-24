@@ -47,3 +47,4 @@ class PlotPerformance:
         # quindi bisogna creare prima un oggetto di tipo Axes e lo si fa con plt.subplots()
         pd.plotting.table(ax, self.performance, loc='center', cellLoc='center')
         plt.savefig("Plots/kNN_table_plot.png", dpi=300)
+        plt.show()
