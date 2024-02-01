@@ -18,9 +18,8 @@ class PlotPerformance:
     def plotBoxplot(self):
         # Il seguente metodo permette la definizione di un boxplot
         plt.figure(figsize=(12, 10))
-        plt.boxplot([self.performance['Accuracy Rate'], self.performance['Error Rate'],
-                               self.performance['Sensitivity'], self.performance['Specificity'], self.performance['Geometry Mean']],
-                              labels=['Accuracy Rate', 'Error Rate', 'Sensitivity', 'Specificity', 'Geometry Mean'])
+        plt.boxplot([self.performance['Accuracy Rate'], self.performance['Sensitivity'], self.performance['Specificity'],
+                     self.performance['Geometry Mean']], labels=['Accuracy Rate', 'Sensitivity', 'Specificity', 'Geometry Mean'])
         plt.title('Performance medie del modello kNN')
         plt.savefig("Plots/kNN_box_plot.png", dpi=500)
         plt.show()
@@ -39,3 +38,12 @@ class PlotPerformance:
         plt.legend()
         plt.savefig("Plots/kNN_line_plot.png", dpi=500)
         plt.show()
+
+    def plotTable(self):
+        # Il seguente metodo permette di visualizzare una tabella con le performance di ogni esperimento del modello kNN
+        fig, ax = plt.subplots()
+        ax.axis('off')
+        # pd.plotting.table richiede in ingresso un oggetto di tipo Axes e un DataFrame che contiene le informazioni da visualizzare
+        # quindi bisogna creare prima un oggetto di tipo Axes e lo si fa con plt.subplots()
+        pd.plotting.table(ax, self.performance, loc='center', cellLoc='center')
+        plt.savefig("Plots/kNN_table_plot.png", dpi=300)

@@ -8,7 +8,7 @@ class KNNPipeline:
 
     def __init__(self, path: str, fs: str = 'stand', splitting_type: str = 'holdout', parametro_splitting: float = 0.2,
                  n_divisioni: int = 5,ar: bool = False, er: bool = False, sens: bool = False, spec: bool = False, gm: bool = False,
-                 all_metrics: bool = True, seed: int = None):
+                 all_metrics: bool = True, seed: int = None, show_boxplot: bool = False, show_lineplot: bool = False, show_table: bool = False):
         """
         COSTRUTTORE DELLA CLASSE KNNPIPELINE
         :param path: percorso del file che contiene il dataset
@@ -29,6 +29,9 @@ class KNNPipeline:
         :param gm: booleano che specifica se si vuole utilizzare la metrica Geometry Mean
         :param all_metrics: booleano che specifica se si vogliono utilizzare tutte le metriche precedenti
         :param seed: seme per il pescaggio random, di train_set e test_set, utile per la riproducibilitá
+        :param show_boxplot: booleano che specifica se si vuole visualizzare il boxplot delle performance
+        :param show_lineplot: booleano che specifica se si vuole visualizzare il lineplot delle performance
+        :param show_table: booleano che specifica se si vuole visualizzare la tabella copn i valori delle performance per ogni esperimento
         :return:
         """
         self.path = path
@@ -43,6 +46,9 @@ class KNNPipeline:
         self.gm = gm
         self.all_metrics = all_metrics
         self.seed = seed
+        self.show_boxplot = show_boxplot
+        self.show_lineplot = show_lineplot
+        self.show_table = show_table
         # esegue la pipeline
         self.doPipeline()
 
@@ -91,8 +97,13 @@ class KNNPipeline:
             # concateno le performance con gli esperimenti precedenti
             performance=pd.concat([performance, perf], ignore_index=True)
             performance['Esperimento']=performance['Esperimento'].astype(int)
-        pd.set_option('display.max_columns', None)
-        print(performance)
 
+        #creo l'oggetto plotter per visualizzare i risultati
         plotter = PlotPerformance(performance)
-        plotter.plotBoxplot()
+        if self.show_table:
+            plotter.plotTable()
+        if self.splitting_type != 'holdout':
+            if self.show_lineplot:
+                plotter.plotLineplot()
+            if self.show_boxplot:
+                plotter.plotBoxplot()
