@@ -65,8 +65,11 @@ class KNNPipeline:
 
         # elimino le righe che contengono valori nulli
         dataset_corretto = preProcess.gestisci_elementi_vuoti(dataset)
+        feature_scaler = FeatureScaling.create(self.fs)
+        dataset_scalato = feature_scaler.scale(dataset_corretto.iloc[:,:-1])
+        dataset_finale = pd.concat([dataset_scalato, dataset_corretto.iloc[:,-1]], axis=1)
         splitter = SplittingFactory().create(self.splitting_type)
-        data_splitted = splitter.split(dataset_corretto, self.parametro_splitting, self.n_divisioni, self.seed)
+        data_splitted = splitter.split(dataset_finale, self.parametro_splitting, self.n_divisioni, self.seed)
 
         # data_splitted è una lista di coppie di dataframe train e test
         # data_splitted = [(train, test), (train, test), ... , (train, test)]
@@ -75,11 +78,11 @@ class KNNPipeline:
         # esperimenti = [[(data train, truth train), (data test, truth test)], ... , [(data train, truth train), (data test, truth test)]]
         # su ogni elemento data_train e data_test di queste coppie di dataframe deve anche avvenire il feature scaling,
         # quindi creiamo l'oggetto feature_scaler
-        feature_scaler = FeatureScaling.create(self.fs)
+
         esperimenti = []
         for tupla in data_splitted:
-            data_train = feature_scaler.scale(preProcess.divisione_features(tupla[0])[0])
-            data_test = feature_scaler.scale(preProcess.divisione_features(tupla[1])[0])
+            data_train = preProcess.divisione_features(tupla[0])[0]
+            data_test = preProcess.divisione_features(tupla[1])[0]
             truth_train = preProcess.divisione_features(tupla[0])[1]
             truth_test = preProcess.divisione_features(tupla[1])[1]
             esperimenti.append([(data_train, truth_train),(data_test, truth_test)])
