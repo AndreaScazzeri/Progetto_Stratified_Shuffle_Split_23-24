@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import pandas as pd
+import math as m
 
 class Metrics(ABC):
     '''
@@ -105,7 +106,21 @@ class Sensitivity(Metrics):
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore della sensitivity
         '''
-        pass
+
+        # Inizio ad implementare la funzione calculate_metrics per la classe Sensitivity
+
+        indici_truth = truth.index
+        indici_coincidenti = predictions.index.intersection(indici_truth)
+        predizioni_coincidenti = predictions.loc[indici_coincidenti]
+        verita_coincidenti = truth.loc[indici_coincidenti]
+
+        # Confronto gli elementi, colonna per colonna, dei 2 dataframe. Come risultante avrò una serie di valori
+        # booleani che indica se, per ogni campione, la predizione e la verità sono entrambe uguali a 1
+        true_positive = ((predizioni_coincidenti == 1) & (verita_coincidenti == 1)).all(axis=1)
+
+        sensitivity_rate = true_positive.mean()
+        return sensitivity_rate
+
 class Specificity(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
@@ -114,7 +129,20 @@ class Specificity(Metrics):
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore della specificity
         '''
-        pass
+
+        # Inizio ad implementare la funzione calculate_metrics per la classe Specificity
+
+        indici_truth = truth.index
+        indici_coincidenti = predictions.index.intersection(indici_truth)
+        predizioni_coincidenti = predictions.loc[indici_coincidenti]
+        verita_coincidenti = truth.loc[indici_coincidenti]
+
+        # Confronto gli elementi, colonna per colonna, dei 2 dataframe. Come risultante avrò una serie di valori
+        # booleani che indica se, per ogni campione, la predizione e la verità sono entrambe uguali a 0 (False)
+        true_positive = ((predizioni_coincidenti == 0) & (verita_coincidenti == 0)).all(axis=1)
+
+        specificity_rate = true_positive.mean()
+        return specificity_rate
 class GeometryMean(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
@@ -123,4 +151,13 @@ class GeometryMean(Metrics):
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore della media geometriva
         '''
-        pass
+
+        # Inizio ad implementare la funzione calculate_metrics per la classe GeometryMean
+        tpr_istanza = Sensitivity()
+        tnr_istanza = Specificity()
+        tpr = tpr_istanza.calculate_metrics(predictions, truth)
+        tnr = tnr_istanza.calculate_metrics(predictions, truth)
+
+        g_mean = m.sqrt(tpr + tnr)
+
+        return g_mean
