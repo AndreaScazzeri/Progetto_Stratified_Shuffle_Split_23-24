@@ -3,6 +3,7 @@ from preprocessing import *
 from splittingFactory import SplittingFactory
 from kNN import KNN
 from metrics import *
+from plotPerformance import *
 class KNNPipeline:
 
     def __init__(self, path: str, fs: str = 'stand', splitting_type: str = 'holdout', parametro_splitting: float = 0.2,
@@ -89,3 +90,6 @@ class KNNPipeline:
             performance=pd.concat([performance, perf], ignore_index=True)
             performance['Esperimento']=performance['Esperimento'].astype(int)
         print(performance)
+
+        plotter = PlotPerformance(performance)
+        plotter.plotBoxplot()
