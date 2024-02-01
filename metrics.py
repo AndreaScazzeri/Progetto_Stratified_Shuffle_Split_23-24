@@ -158,6 +158,6 @@ class GeometryMean(Metrics):
         tpr = tpr_istanza.calculate_metrics(predictions, truth)
         tnr = tnr_istanza.calculate_metrics(predictions, truth)
 
-        g_mean = m.sqrt(tpr + tnr)
+        g_mean = m.sqrt(tpr * tnr)
 
         return g_mean
