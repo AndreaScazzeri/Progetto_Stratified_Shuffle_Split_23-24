@@ -17,13 +17,9 @@ class KNN:
         :param k: è il parametro che mi indica quanti valori più vicini al punto devo prendere
         """
         self.k = k
-        self.x_train = esperimento[0][0][['Clump Thickness', 'Uniformity of Cell Size', 'Uniformity of Cell Shape',
-                  'Marginal Adhesion', 'Single Epithelial Cell Size', 'Bare Nuclei', 'Bland Chromatin',
-                  'Normal Nucleoli', 'Mitoses']]
+        self.x_train = esperimento[0][0].iloc[:, 1:]
         self.y_train = esperimento[0][1]
-        self.x_test = esperimento[1][0][['Clump Thickness', 'Uniformity of Cell Size', 'Uniformity of Cell Shape',
-                  'Marginal Adhesion', 'Single Epithelial Cell Size', 'Bare Nuclei', 'Bland Chromatin',
-                  'Normal Nucleoli', 'Mitoses']]
+        self.x_test = esperimento[1][0].iloc[:, 1:]
         self.y_test = esperimento[1][1]
 
     def calculate_distances(self, row_test):
@@ -42,6 +38,7 @@ class KNN:
         Questa funzione esegue le predizioni su ogni elemento del test e restituisce la predizione rispetto alla classe
         più numerosa nei k elementi più vicini
         """
+        #copio le predizioni solo per avere la struttura del dataframe che ci servirà per calcolare le metriche
         predictions = self.y_test.copy()
         for index_test, row_test in self.x_test.iterrows():
             distances = self.calculate_distances(row_test)
@@ -52,5 +49,6 @@ class KNN:
                 nearest_labels.append(self.y_train.loc[indice])
             unique_labels, counts = np.unique(nearest_labels, return_counts=True)
             predicted_label = unique_labels[np.argmax(counts)]
+            # aggiungo la predizione al dataframe delle predizioni che ha la stessa struttura del dataframe delle verità
             predictions.loc[index_test] = predicted_label
         return predictions
