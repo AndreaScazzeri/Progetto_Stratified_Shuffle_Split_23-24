@@ -7,8 +7,8 @@ from plotPerformance import *
 class KNNPipeline:
 
     def __init__(self, path: str, fs: str = 'stand', splitting_type: str = 'holdout', parametro_splitting: float = 0.2,
-                 n_divisioni: int = 5,ar: bool = False, er: bool = False, sens: bool = False, spec: bool = False, gm: bool = False,
-                 all_metrics: bool = True, seed: int = None, show_boxplot: bool = False, show_lineplot: bool = False, show_table: bool = False):
+                 n_divisioni: int = 5, k: int = 7, ar: bool = False, er: bool = False, sens: bool = False, spec: bool = False, gm: bool = False,
+                 all_metrics: bool = True, seed: int = None, show_boxplot: bool = False, show_lineplot: bool = False, show_table: bool = True):
         """
         COSTRUTTORE DELLA CLASSE KNNPIPELINE
         :param path: percorso del file che contiene il dataset
@@ -22,6 +22,7 @@ class KNNPipeline:
                     eseguire se si sceglie lo stratified shuffle subsampling
         :param n_divisioni: numero di volte che deve essere ripetuto lo splitting e quindi gli esperimenti con il metodo
                     stratified shuffle split, con l'holdout viene ignorato (di default vale 5)
+        :param k: numero di vicini da considerare per la classificazione (di default vale 7)
         :param ar: booleano che specifica se si vuole utilizzare la metrica Accuracy Rate
         :param er: booleano che specifica se si vuole utilizzare la metrica Error Rate
         :param sens: booleano che specifica se si vuole utilizzare la metrica Sensitivity
