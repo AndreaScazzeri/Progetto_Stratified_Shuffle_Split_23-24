@@ -45,28 +45,16 @@ class Metrics(ABC):
 class AccuracyRate(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
-        Calcola l'accuracy rate
+        Calcola l'accuracy rate: metrica che indica quanto il modello predice bene
         :param predictions: dataframe che contiene le predizioni effettuate
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore dell'accuracy rate
         '''
         #Inizio ad implementare la classe AccuracyRate
 
-        #Vedo quali sono gli insiemi degli elementi che sono comuni agli oggetti prediction e truth
-        indici_truth = truth.index
-        indici_coincidenti = predictions.index.intersection(indici_truth)
-
-        #Estraggo le righe dal dataframe 'predictions' che contengono gli indici specificati,
-        #ovvero 'indici_coincidenti' tramite la funzione loc
-        predizioni_coincidenti = predictions.loc[indici_coincidenti]
-
-        #Estraggo le righe dal dataframe 'truth' che contengono gli indici specificati,
-        #ovvero 'indici_coincidenti' tramite la funzione loc
-        verita_coincidenti = truth.loc[indici_coincidenti]
-
         #Confronto gli elementi, colonna per colonna, dei 2 dataframe. Come risultante avrò una serie di valori
         #booleani che mi dicono se i valori coincidono
-        valori_coincidenti = (predizioni_coincidenti == verita_coincidenti).all(axis=1)
+        valori_coincidenti = (predictions == truth).all(axis=1)
 
         #Calcolo l'accuracy rate utilizzando una media, essendo tali valori 0/1 , quello che restituirà sarà
         #la percentuale di 'uni' nella serie di valori
@@ -76,7 +64,7 @@ class AccuracyRate(Metrics):
 class ErrorRate(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
-        Calcola l'error rate
+        Calcola l'error rate: metrica che indica quanto il modello predice male (é l'inverso dell'accuracy)
         :param predictions: dataframe che contiene le predizioni effettuate
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore dell'error rate
@@ -85,23 +73,20 @@ class ErrorRate(Metrics):
         # Inizio ad implementare la funzione calculate_metrics per la classe ErrorRate, che è simile alla
         # funzione per il calcolo dell'accuratezza.
 
-        indici_truth = truth.index
-        indici_coincidenti = predictions.index.intersection(indici_truth)
-        predizioni_coincidenti = predictions.loc[indici_coincidenti]
-        verita_coincidenti = truth.loc[indici_coincidenti]
-
         # Confronto gli elementi, colonna per colonna, dei 2 dataframe. Come risultante avrò una serie di valori
         # booleani che mi dicono se i valori non coincidono
-        valori_non_coincidenti = (predizioni_coincidenti != verita_coincidenti).all(axis=1)
+        valori_non_coincidenti = (predictions != truth).all(axis=1)
 
-        # Calcolo l'error rate
+        # Calcolo l'error rate utilizzando una media, essendo tali valori 0/1 , quello che restituirà sarà
+        # la percentuale di 'zeri' nella serie di valori
         error_rate = valori_non_coincidenti.mean()
+
         return error_rate
 
 class Sensitivity(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
-        Calcola la sensitivity
+        Calcola la sensitivity: metrica che indica quanto il modello ha predetto bene per la classe 4
         :param predictions: dataframe che contiene le predizioni effettuate
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore della sensitivity
@@ -109,22 +94,29 @@ class Sensitivity(Metrics):
 
         # Inizio ad implementare la funzione calculate_metrics per la classe Sensitivity
 
-        indici_truth = truth.index
-        indici_coincidenti = predictions.index.intersection(indici_truth)
-        predizioni_coincidenti = predictions.loc[indici_coincidenti]
-        verita_coincidenti = truth.loc[indici_coincidenti]
+        # Estrae un dataframe con soltanto veritá di classe 4 (tutti i positivi)
+        df_truth4 = truth[truth['Class'] == 4]
 
-        # Confronto gli elementi, colonna per colonna, dei 2 dataframe. Come risultante avrò una serie di valori
-        # booleani che indica se, per ogni campione, la predizione e la verità sono entrambe uguali a 1
-        true_positive = ((predizioni_coincidenti == 1) & (verita_coincidenti == 1)).all(axis=1)
+        #Ottengo gli indici di dove ho le veritá (4 nel nostro caso)
+        indici_truth = df_truth4.index
 
+        # Ottengo gli elementi di predizione i cui indici coincidono con le veritá di classe 4
+        predizioni_classe_4 = predictions.loc[indici_truth]
+
+
+        # Confronto gli elementi, riga per riga, dei 2 dataframe. Come risultante avrò una serie di valori
+        # booleani che indica se, per ogni campione, la predizione e la verità sono entrambe uguali a 1 (4 nel nostro caso)
+        true_positive = (predizioni_classe_4 == df_truth4).all(axis=1)
+
+        #Calcolo la media
         sensitivity_rate = true_positive.mean()
+
         return sensitivity_rate
 
 class Specificity(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
-        Calcola la specificity
+        Calcola la specificity: metrica che indica quanto il modello ha predetto bene per la classe 2
         :param predictions: dataframe che contiene le predizioni effettuate
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore della specificity
@@ -132,21 +124,29 @@ class Specificity(Metrics):
 
         # Inizio ad implementare la funzione calculate_metrics per la classe Specificity
 
-        indici_truth = truth.index
-        indici_coincidenti = predictions.index.intersection(indici_truth)
-        predizioni_coincidenti = predictions.loc[indici_coincidenti]
-        verita_coincidenti = truth.loc[indici_coincidenti]
+        # Estrae un dataframe con soltanto veritá di classe 2 (tutti i negativi)
+        df_truth2 = truth[truth['Class'] == 2]
 
-        # Confronto gli elementi, colonna per colonna, dei 2 dataframe. Come risultante avrò una serie di valori
-        # booleani che indica se, per ogni campione, la predizione e la verità sono entrambe uguali a 0 (False)
-        true_positive = ((predizioni_coincidenti == 0) & (verita_coincidenti == 0)).all(axis=1)
+        # Ottengo gli indici del vettore delle veritá le cui veritá sono di classe 2
+        indici_truth = df_truth2.index
 
+        # Ottengo gli elementi di predizione i cui indici coincidono con le veritá di classe 2
+        predizioni_classe_2 = predictions.loc[indici_truth]
+
+        # Confronto gli elementi, riga per riga, dei 2 dataframe. Come risultante avrò una serie di valori
+        # booleani che indica se, per ogni campione, la predizione e la verità sono entrambe uguali a 0 (2 nel nostro caso)
+        true_positive = (predizioni_classe_2 != df_truth2).all(axis=1)
+
+        #Calcolo la media
         specificity_rate = true_positive.mean()
+
         return specificity_rate
+
 class GeometryMean(Metrics):
     def calculate_metrics(self, predictions: pd.DataFrame, truth: pd.DataFrame):
         '''
-        Calcola la media geometrica
+        Calcola la media geometrica: metrica che permette di capire come il modello sta performando sulle due classi in
+                                     contemporanea (4 e 2).
         :param predictions: dataframe che contiene le predizioni effettuate
         :param truth: dataframe che contiene i risultati veri
         :return: resituisce il valore della media geometriva
