@@ -47,3 +47,21 @@ da eseguire (default 5)
 
 *ATTENZIONE* - se si decide di visualizzare il boxplot, il lineplot o la teabella delle performance essi verrano anche 
 salvati in una sottocartella della current directory chiamata `Plots` (che deve esistere)
+
+Inoltre il toolbox suppone che il dataset fornito in ingresso sia un file .csv dove:
+* la prima colonna è la colonna degli id di ogni istanza (quindi verrà scartata durante il calcolo delle distanze) 
+* l'ultima colonna è la colonna delle predizioni (quindi non sarà soggetta a feature scaling)
+
+### Come effettuare predizioni
+
+È possibile effettuare predizioni su nuovi dati utilizzando il metodo `predict` della classe `KNNPipeline`. Tale metodo 
+deve ricevere in ingresso il dataframe da classificare!
+
+Esempio:
+
+`pipeline = KNNPipeline( ... )`
+
+`predizione = pipeline.predict(dataframe_da_classificare)`
+
+*ATTENZIONE*: il dataframe da classificare deve avere le stesse colonne del dataframe di training, _compresa la colonna delle
+predizioni_ che può eventualmente essere vuota. Inoltre, il dataframe da classificare non deve avere valori mancanti!
