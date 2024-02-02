@@ -52,7 +52,7 @@ class KNNPipeline:
         self.show_lineplot = show_lineplot
         self.show_table = show_table
         # esegue la pipeline
-        self.doPipeline()
+        self.dataset, self.performance = self.doPipeline()
 
 
     def doPipeline(self):
@@ -66,7 +66,9 @@ class KNNPipeline:
         # elimino le righe che contengono valori nulli
         dataset_corretto = preProcess.gestisci_elementi_vuoti(dataset)
         feature_scaler = FeatureScaling.create(self.fs)
+        # eseguo il feature scaling solo sulle variabili indipendenti
         dataset_scalato = feature_scaler.scale(dataset_corretto.iloc[:,:-1])
+        # creo un nuovo dataset che contiene le variabili indipendenti scalate e la variabile dipendente
         dataset_finale = pd.concat([dataset_scalato, dataset_corretto.iloc[:,-1]], axis=1)
         splitter = SplittingFactory().create(self.splitting_type)
         data_splitted = splitter.split(dataset_finale, self.parametro_splitting, self.n_divisioni, self.seed)
@@ -112,3 +114,38 @@ class KNNPipeline:
                 plotter.plotLineplot()
             if self.show_boxplot:
                 plotter.plotBoxplot()
+
+        return dataset_corretto, performance
+
+    def predict(self, object_to_pred: pd.DataFrame):
+        """
+        Metodo che predice la classe di un oggetto
+        :param object_to_pred: oggetto da predire deve essere un dataframe con la stessa struttura del dataset su cui è
+                stato fatto il training. Può anche essere un insieme di oggetti
+        :return: 'predizione' è la classe predetta ed è un dataframe che contiene la predizione
+        """
+        # controllo subito se il dataframe da predire ha la stessa struttura del dataframe su cui è stato fatto il training
+        if (object_to_pred.columns != self.dataset.columns).any():
+            raise ValueError('Il dataframe da predire deve avere la stessa struttura del dataframe su cui è stato fatto il training')
+
+        # ho bisogno di rifare il feature scaling con l'oggetto da predire. Quindi devo creare un oggetto feature_scaler
+        feature_scaler = FeatureScaling.create(self.fs)
+        # il feature scaling lo devo fare su tutto il dataset di train non scalato al quale vengono aggiunti i nuovi oggetti da predire
+        dataset_scalato = feature_scaler.scale(pd.concat([self.dataset.iloc[:,:-1], object_to_pred.iloc[:,:-1]], axis=0, ignore_index=True))
+
+        #l'oggetto KNN deve prendere in ingresso un esperimento, che è stato pensato con la struttura di una lista contente
+        #due tuple, la prima con il train set (dati e verità) e la seconda con il test set (dati e verità).
+        # In questo caso il test set è composto dal solo elemento da predire e la verità è ovviamente assente, ma mi aspetto che
+        # il dataframe da predire ha già la colonna con la verità, magari con valori NaN o negativi (a disrezione dell'utente)
+
+        # Il primo elemento della tupla corrispondente al train set è la porzione di dataset di train scalato corrispondente alle righe
+        # di train, il secondo elemento è la verità corrispondente a queste righe che non viene scalata quindi la prendo dal dataset originale
+
+        # Il secondo elemento della tupla corrispondente al test set è la porzione di dataset di train scalato corrispondente alle righe
+        # da predire, il secondo elemento è la predizione che dovrò fare che ancora una volta prendo dal dataset originale
+        esperimento=[(dataset_scalato.iloc[:self.dataset.shape[0],:], self.dataset.iloc[:,-1]),
+                     (dataset_scalato.iloc[self.dataset.shape[0]:,:], object_to_pred.iloc[:,[-1]])]
+        kNN=KNN(esperimento, self.k)
+        # eseguo la predizione
+        predizione = kNN.doPrediction()
+        return predizione
