@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 class PlotPerformance:
 
     """
@@ -21,7 +22,11 @@ class PlotPerformance:
         plt.boxplot([self.performance['Accuracy Rate'], self.performance['Sensitivity'], self.performance['Specificity'],
                      self.performance['Geometry Mean']], labels=['Accuracy Rate', 'Sensitivity', 'Specificity', 'Geometry Mean'])
         plt.title('Performance medie del modello kNN')
-        plt.savefig("Plots/kNN_box_plot.png", dpi=500)
+        if os.path.exists('Plots'):
+            plt.savefig("Plots/kNN_box_plot.png", dpi=500)
+        else:
+            os.mkdir('Plots')
+            plt.savefig("Plots/kNN_box_plot.png", dpi=500)
         plt.show()
 
     def plotLineplot(self):
@@ -36,7 +41,11 @@ class PlotPerformance:
         plt.xlabel('Esperimento')
         plt.ylabel('Performance')
         plt.legend()
-        plt.savefig("Plots/kNN_line_plot.png", dpi=500)
+        if os.path.exists('Plots'):
+            plt.savefig("Plots/kNN_line_plot.png", dpi=500)
+        else:
+            os.mkdir('Plots')
+            plt.savefig("Plots/kNN_line_plot.png", dpi=500)
         plt.show()
 
     def plotTable(self):
@@ -46,5 +55,9 @@ class PlotPerformance:
         # pd.plotting.table richiede in ingresso un oggetto di tipo Axes e un DataFrame che contiene le informazioni da visualizzare
         # quindi bisogna creare prima un oggetto di tipo Axes e lo si fa con plt.subplots()
         pd.plotting.table(ax, self.performance, loc='center', cellLoc='center')
-        plt.savefig("Plots/kNN_table_plot.png", dpi=300)
+        if os.path.exists('Plots'):
+            plt.savefig("Plots/kNN_table_plot.png", dpi=500)
+        else:
+            os.mkdir('Plots')
+            plt.savefig("Plots/kNN_table_plot.png", dpi=500)
         plt.show()
