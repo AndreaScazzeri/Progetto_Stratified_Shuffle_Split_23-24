@@ -90,20 +90,22 @@ class KNNPipeline:
             esperimenti.append([(data_train, truth_train),(data_test, truth_test)])
 
         # creo un dataframe che conterrà le performance di ogni esperimento
-        performance = pd.DataFrame({'Esperimento':[], 'Accuracy Rate':[], 'Error Rate':[], 'Sensitivity':[], 'Specificity':[], 'Geometry Mean':[]})
+        performance = pd.DataFrame({'Esperimento': [], 'Accuracy Rate': [], 'Error Rate': [], 'Sensitivity': [], 'Specificity': [], 'Geometry Mean': []})
+        i = 0
         for esperimento in esperimenti:
             # Creo un oggetto kNN che prende in input un esperimento
-            kNN=KNN(esperimento, self.k)
+            kNN = KNN(esperimento, self.k, i)
             # Eseguo le predizioni per il kNN e le salvo in un dataframe con la stessa struttura delle verità
             predizioni = kNN.doPrediction()
             # Calcolo le metriche
             perf=Metrics.get_metrics(predizioni, esperimento[1][1],self.ar, self.er, self.sens, self.spec, self.gm, self.all_metrics)
             # aggiungo le informazioni dell'esperimento dal dataframe che contiene le performance
-            perf['Esperimento']=len(performance)+1
-            perf=pd.DataFrame(perf, index=[0])
+            perf['Esperimento'] = len(performance)+1
+            perf = pd.DataFrame(perf, index=[0])
             # concateno le performance con gli esperimenti precedenti
-            performance=pd.concat([performance, perf], ignore_index=True)
-            performance['Esperimento']=performance['Esperimento'].astype(int)
+            performance = pd.concat([performance, perf], ignore_index=True)
+            performance['Esperimento'] = performance['Esperimento'].astype(int)
+            i += 1
 
         #creo l'oggetto plotter per visualizzare i risultati
         plotter = PlotPerformance(performance)
