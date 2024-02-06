@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+import time
 class PlotPerformance:
 
     """
@@ -23,10 +24,10 @@ class PlotPerformance:
                      self.performance['Geometry Mean']], labels=['Accuracy Rate', 'Sensitivity', 'Specificity', 'Geometry Mean'])
         plt.title('Performance medie del modello kNN')
         if os.path.exists('Plots'):
-            plt.savefig("Plots/kNN_box_plot.png", dpi=500)
+            plt.savefig("Plots/kNN_box_plot"+time.strftime("%Y%m%d-%H%M%S")+".png", dpi=500)
         else:
             os.mkdir('Plots')
-            plt.savefig("Plots/kNN_box_plot.png", dpi=500)
+            plt.savefig("Plots/kNN_box_plot"+time.strftime("%Y%m%d-%H%M%S")+".png", dpi=500)
         plt.show()
 
     def plotLineplot(self):
@@ -42,10 +43,10 @@ class PlotPerformance:
         plt.ylabel('Performance')
         plt.legend()
         if os.path.exists('Plots'):
-            plt.savefig("Plots/kNN_line_plot.png", dpi=500)
+            plt.savefig("Plots/kNN_line_plot"+time.strftime("%Y%m%d-%H%M%S")+".png", dpi=500)
         else:
             os.mkdir('Plots')
-            plt.savefig("Plots/kNN_line_plot.png", dpi=500)
+            plt.savefig("Plots/kNN_line_plot"+time.strftime("%Y%m%d-%H%M%S")+".png", dpi=500)
         plt.show()
 
     def plotTable(self):
@@ -56,8 +57,8 @@ class PlotPerformance:
         # quindi bisogna creare prima un oggetto di tipo Axes e lo si fa con plt.subplots()
         pd.plotting.table(ax, self.performance, loc='center', cellLoc='center')
         if os.path.exists('Plots'):
-            plt.savefig("Plots/kNN_table_plot.png", dpi=500)
+            plt.savefig("Plots/kNN_table_plot"+time.strftime("%Y%m%d-%H%M%S")+".png", dpi=500)
         else:
             os.mkdir('Plots')
-            plt.savefig("Plots/kNN_table_plot.png", dpi=500)
+            plt.savefig("Plots/kNN_table_plot"+time.strftime("%Y%m%d-%H%M%S")+".png", dpi=500)
         plt.show()
