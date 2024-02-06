@@ -71,49 +71,55 @@ class KNNPipeline:
         # creo un nuovo dataset che contiene le variabili indipendenti scalate e la variabile dipendente
         dataset_finale = pd.concat([dataset_scalato, dataset_corretto.iloc[:,-1]], axis=1)
         splitter = SplittingFactory().create(self.splitting_type)
-        data_splitted = splitter.split(dataset_finale, self.parametro_splitting, self.n_divisioni, self.seed)
+        # a seconda del tipo di splitting scelto eseguo lo splitting del dataset. Se sono stati specificati i parametri
+        # 'holdout' o 'sss' questo for loop viene eseguito una sola volta. Altrimenti se sono stati scelti entrambi viene eseguito due volte:
+        # una per l'holdout e una per lo stratified shuffle subsampling (che a sua volta ripete lo splitting n_divisioni volte)
+        for splitter in splitter:
+            data_splitted = splitter.split(dataset_finale, self.parametro_splitting, self.n_divisioni, self.seed)
 
-        # data_splitted è una lista di coppie di dataframe train e test
-        # data_splitted = [(train, test), (train, test), ... , (train, test)]
-        # ognuna di queste ora deve essere inserita in una lista [(data train, truth train), (data test, truth test)]
-        # per farlo si utilizza la funzione divisione_features di preProcessing
-        # esperimenti = [[(data train, truth train), (data test, truth test)], ... , [(data train, truth train), (data test, truth test)]]
-        # su ogni elemento data_train e data_test di queste coppie di dataframe deve anche avvenire il feature scaling,
-        # quindi creiamo l'oggetto feature_scaler
+            # data_splitted è una lista di coppie di dataframe train e test
+            # data_splitted = [(train, test), (train, test), ... , (train, test)]
+            # ognuna di queste ora deve essere inserita in una lista [(data train, truth train), (data test, truth test)]
+            # per farlo si utilizza la funzione divisione_features di preProcessing
+            # esperimenti = [[(data train, truth train), (data test, truth test)], ... , [(data train, truth train), (data test, truth test)]]
+            # su ogni elemento data_train e data_test di queste coppie di dataframe deve anche avvenire il feature scaling,
+            # quindi creiamo l'oggetto feature_scaler
 
-        esperimenti = []
-        for tupla in data_splitted:
-            data_train = preProcess.divisione_features(tupla[0])[0]
-            data_test = preProcess.divisione_features(tupla[1])[0]
-            truth_train = preProcess.divisione_features(tupla[0])[1]
-            truth_test = preProcess.divisione_features(tupla[1])[1]
-            esperimenti.append([(data_train, truth_train),(data_test, truth_test)])
+            esperimenti = []
+            for tupla in data_splitted:
+                data_train = preProcess.divisione_features(tupla[0])[0]
+                data_test = preProcess.divisione_features(tupla[1])[0]
+                truth_train = preProcess.divisione_features(tupla[0])[1]
+                truth_test = preProcess.divisione_features(tupla[1])[1]
+                esperimenti.append([(data_train, truth_train),(data_test, truth_test)])
 
-        # creo un dataframe che conterrà le performance di ogni esperimento
-        performance = pd.DataFrame({'Esperimento':[], 'Accuracy Rate':[], 'Error Rate':[], 'Sensitivity':[], 'Specificity':[], 'Geometry Mean':[]})
-        for esperimento in esperimenti:
-            # Creo un oggetto kNN che prende in input un esperimento
-            kNN=KNN(esperimento, self.k)
-            # Eseguo le predizioni per il kNN e le salvo in un dataframe con la stessa struttura delle verità
-            predizioni = kNN.doPrediction()
-            # Calcolo le metriche
-            perf=Metrics.get_metrics(predizioni, esperimento[1][1],self.ar, self.er, self.sens, self.spec, self.gm, self.all_metrics)
-            # aggiungo le informazioni dell'esperimento dal dataframe che contiene le performance
-            perf['Esperimento']=len(performance)+1
-            perf=pd.DataFrame(perf, index=[0])
-            # concateno le performance con gli esperimenti precedenti
-            performance=pd.concat([performance, perf], ignore_index=True)
-            performance['Esperimento']=performance['Esperimento'].astype(int)
+            # creo un dataframe che conterrà le performance di ogni esperimento
+            performance = pd.DataFrame({'Esperimento': [], 'Accuracy Rate': [], 'Error Rate': [], 'Sensitivity': [], 'Specificity': [], 'Geometry Mean': []})
+            i = 0
+            for esperimento in esperimenti:
+                # Creo un oggetto kNN che prende in input un esperimento
+                kNN = KNN(esperimento, self.k, i)
+                # Eseguo le predizioni per il kNN e le salvo in un dataframe con la stessa struttura delle verità
+                predizioni = kNN.doPrediction()
+                # Calcolo le metriche
+                perf = Metrics.get_metrics(predizioni, esperimento[1][1], self.ar, self.er, self.sens, self.spec, self.gm, self.all_metrics)
+                # aggiungo le informazioni dell'esperimento dal dataframe che contiene le performance
+                perf['Esperimento'] = len(performance)+1
+                perf = pd.DataFrame(perf, index=[0])
+                # concateno le performance con gli esperimenti precedenti
+                performance = pd.concat([performance, perf], ignore_index=True)
+                performance['Esperimento'] = performance['Esperimento'].astype(int)
+                i += 1
 
-        #creo l'oggetto plotter per visualizzare i risultati
-        plotter = PlotPerformance(performance)
-        if self.show_table:
-            plotter.plotTable()
-        if self.splitting_type != 'holdout':
-            if self.show_lineplot:
-                plotter.plotLineplot()
-            if self.show_boxplot:
-                plotter.plotBoxplot()
+            #creo l'oggetto plotter per visualizzare i risultati
+            plotter = PlotPerformance(performance)
+            if self.show_table:
+                plotter.plotTable()
+            if performance.shape[0] > 1:
+                if self.show_lineplot:
+                    plotter.plotLineplot()
+                if self.show_boxplot:
+                    plotter.plotBoxplot()
 
         return dataset_corretto, performance
 
