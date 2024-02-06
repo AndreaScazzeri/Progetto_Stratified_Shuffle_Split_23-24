@@ -4,9 +4,9 @@ from stratifiedShuffleSubsamplingSplitter import StratifiedShuffleSubsamplingSpl
 class SplittingFactory:
     def create(self, splitting_type:str):
         if splitting_type=='holdout':
-            splitter=HoldoutSplitter()
+            splitter=(HoldoutSplitter(),)
         elif splitting_type=='sss':
-            splitter=StratifiedShuffleSubsamplingSplitter()
+            splitter=(StratifiedShuffleSubsamplingSplitter(),)
         elif splitting_type=='both':
             splitter1=HoldoutSplitter()
             splitter2 = StratifiedShuffleSubsamplingSplitter()
