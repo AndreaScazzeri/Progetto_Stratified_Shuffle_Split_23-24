@@ -26,7 +26,25 @@ anche ad altri tipi di file magari sfruttando il pattern strategy insieme al fac
 
 ## Come utilizzare il toolbox
 
-Per utilizzare il toolbox è necessario importare la classe `KNNPipeline` e creare un'istanza della classe specificando i seguenti parametri:
+Per utilizzare il toolbox è necessario scaricare la cartella contenenete il progetto e eseguire il file `main.py`.
+Questo può essere fatto da terminale digitando `python main.py` oppure `python3 main.py` nella cartella del progetto.
+Verrà chiesto all'utente di inserire tutti i parametri necessari per l'esecuzione del programma. Tra essi solo il `Path`
+è obbligatorio, mentre gli altri sono opzionali. Se non vengono inseriti verranno utilizzati i valori di default. In ogni caso 
+verrà tutto specificato ad ogni istruzione
+
+
+*ATTENZIONE* - se si decide di visualizzare il boxplot, il lineplot o la teabella delle performance essi verrano anche 
+salvati in una sottocartella della current directory chiamata `Plots` (non è richiesto che essa esista già prima del lancio del programma)
+
+Inoltre il toolbox suppone che il dataset fornito in ingresso sia un file .csv dove:
+* la prima colonna è la colonna degli ID di ogni istanza (quindi verrà scartata durante il calcolo delle distanze) 
+* l'ultima colonna è la colonna delle predizioni (quindi non sarà soggetta a feature scaling)
+
+
+### Come utilizzare il toolbox in programmazione
+
+Per l'utente esperto che vuole utilizzare il toolbox in programmazione, è sufficiente importare la classe `KNNPipeline` 
+e creare un'istanza della classe specificando i seguenti parametri:
 * `path` - il percorso del file .csv contenente il dataset su cui fare il training e il testing
 * `fs` - il tipo di feature scaling da utilizzare. Può essere `norm` (normalizzazione) o `stand` (standardizzazione - default)
 * `splitting_type` - il tipo di splitting da utilizzare. Può essere `holdout` (default) o `sss` (Stratified Shuffle Split) 
@@ -45,14 +63,7 @@ da eseguire (default 5)
 * `show_lineplot` - indica se si vuole visualizzare il lineplot boxplot delle performance (default False)
 * `show_table` - indica se si vuole visualizzare la tabella boxplot delle performance (default True)
 
-*ATTENZIONE* - se si decide di visualizzare il boxplot, il lineplot o la teabella delle performance essi verrano anche 
-salvati in una sottocartella della current directory chiamata `Plots` (che deve esistere)
-
-Inoltre il toolbox suppone che il dataset fornito in ingresso sia un file .csv dove:
-* la prima colonna è la colonna degli id di ogni istanza (quindi verrà scartata durante il calcolo delle distanze) 
-* l'ultima colonna è la colonna delle predizioni (quindi non sarà soggetta a feature scaling)
-
-### Come effettuare predizioni
+### Come utilizzare il toolbox in programmazione per fare predizioni
 
 È possibile effettuare predizioni su nuovi dati utilizzando il metodo `predict` della classe `KNNPipeline`. Tale metodo 
 deve ricevere in ingresso il dataframe da classificare!
