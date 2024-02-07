@@ -1,5 +1,5 @@
 from kNNPipeline import KNNPipeline
-from Input import Input_parametriEsecuzione
+from input import Input_parametriEsecuzione
 if __name__ == '__main__':
     input = Input_parametriEsecuzione.parametriEsecuzione()
     pipeline = KNNPipeline(input[0], fs=input[1], splitting_type= input[2], parametro_splitting=input[3],
