@@ -1,10 +1,10 @@
-
+import os
 class Input_parametriEsecuzione():
     @staticmethod
     def parametriEsecuzione():
         while True:
-            path = input("Inserisci il tipo di Path: ")
-            if path != "":
+            path = input("Inserisci il Path: ")
+            if os.path.exists(path):
                 break
             else:
                 print("Inserire un Path valido!")
