@@ -58,7 +58,7 @@ class KNNPipeline:
     def doPipeline(self):
         """
         Metodo che esegue tutta la pipeline del kNN
-        :return: decidere che cose restituisce
+        :return: restituisce una tupla dove il primo elemento é il dataset corretto senza elementi vuoti e il secondo elemento sono le performance degli esperimenti
         """
         dataset = pd.read_csv(self.path) # implementare il factory pattern per rendere modulare la lettura dei dati
         preProcess = PreProcessing()
@@ -74,6 +74,9 @@ class KNNPipeline:
         # a seconda del tipo di splitting scelto eseguo lo splitting del dataset. Se sono stati specificati i parametri
         # 'holdout' o 'sss' questo for loop viene eseguito una sola volta. Altrimenti se sono stati scelti entrambi viene eseguito due volte:
         # una per l'holdout e una per lo stratified shuffle subsampling (che a sua volta ripete lo splitting n_divisioni volte)
+        performance = pd.DataFrame(
+            {'Esperimento': [], 'Accuracy Rate': [], 'Error Rate': [], 'Sensitivity': [], 'Specificity': [],
+             'Geometry Mean': []})
         for splitter in splitter:
             data_splitted = splitter.split(dataset_finale, self.parametro_splitting, self.n_divisioni, self.seed)
 
@@ -94,7 +97,6 @@ class KNNPipeline:
                 esperimenti.append([(data_train, truth_train),(data_test, truth_test)])
 
             # creo un dataframe che conterrà le performance di ogni esperimento
-            performance = pd.DataFrame({'Esperimento': [], 'Accuracy Rate': [], 'Error Rate': [], 'Sensitivity': [], 'Specificity': [], 'Geometry Mean': []})
             i = 0
             for esperimento in esperimenti:
                 # Creo un oggetto kNN che prende in input un esperimento
