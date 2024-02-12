@@ -33,7 +33,7 @@ class HoldoutSplitter(Splitting):
 
         #Creo il test set estraendo il 20% dei dati in modo ordinato e il restante 80% lo metto nel train set
         if indice_di_divisione_random > len(df)-grandezza_test_set:
-            test_set = pd.concat(df.iloc[indice_di_divisione_random:] , df.iloc[:grandezza_test_set - (len(df)-indice_di_divisione_random)])
+            test_set = pd.concat([df.iloc[indice_di_divisione_random:] , df.iloc[:grandezza_test_set - (len(df)-indice_di_divisione_random)]])
             train_set = df.iloc[grandezza_test_set - (len(df)-indice_di_divisione_random) +1: indice_di_divisione_random]
 
         else:
